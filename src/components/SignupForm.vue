@@ -1,10 +1,13 @@
 <template>
-  <form>
+  <form @submit.prevent="createAccount">
     <label>Email:</label>
     <input type="email" v-model="email" />
 
     <label>Password:</label>
     <input type="password" v-model="password" />
+    <div>
+      <p>{{ passwordError }}</p>
+    </div>
 
     <label>Role:</label>
     <select v-model="role">
@@ -44,14 +47,20 @@
       <input type="checkbox" value="Cherubim" v-model="names" />
       <label>Cherubim</label>
     </div>
+    <div class="submit">
+      <button>Create an Account</button>
+    </div>
   </form>
-  <div class="output">
-    <p>Email: {{ email }}</p>
-    <p>Password: {{ password }}</p>
-    <p>Role: {{ role }}</p>
-    <p>Terms &#38; conditions accepted: {{ terms }}</p>
-    <p>Names: {{ names }}</p>
-    <p>Skills: {{ skills }}</p>
+  <div class="backdrop" v-if="showResults" @click.self="closeBackdrop">
+    <div class="output">
+      <h2>Data collected from form(For DB or server or anything)</h2>
+      <p>Email: {{ email }}</p>
+      <p>Password: {{ password }}</p>
+      <p>Role: {{ role }}</p>
+      <p>Terms &#38; conditions accepted: {{ terms }}</p>
+      <p>Names: {{ names }}</p>
+      <p>Skills: {{ skills }}</p>
+    </div>
   </div>
 </template>
 
@@ -67,6 +76,8 @@ export default {
       names: [],
       tempSkill: "",
       skills: [],
+      passwordError: "",
+      showResults: false,
     };
   },
   methods: {
@@ -81,6 +92,15 @@ export default {
 
     rmSkill(item) {
       this.skills = this.skills.filter((skill) => skill !== item);
+    },
+    createAccount() {
+      this.showResults = true;
+      if (this.password.length < 5) {
+        this.passwordError = "⚠️ The password should be atleast 5 chars long!";
+      }
+    },
+    closeBackdrop() {
+      this.showResults = false;
     },
   },
 };
@@ -141,5 +161,45 @@ input[type="checkbox"] {
 
 .pill:hover {
   opacity: 0.8;
+}
+
+.submit {
+  text-align: center;
+}
+
+.submit button {
+  background-color: blue;
+  border-radius: 20px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+}
+
+.submit button:hover {
+  opacity: 0.7;
+}
+
+.backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.backdrop:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.output {
+  width: 500px;
+  margin: 10px auto 0 20px;
+  background: #fff;
+  text-align: left;
+  border-radius: 20px;
+  padding: 10px;
+  transition: all 0.3s ease-in-out;
 }
 </style>
