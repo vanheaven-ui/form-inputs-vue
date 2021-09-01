@@ -16,7 +16,9 @@
 
     <label>Skills:</label>
     <input type="text" v-model="tempSkill" @keyup.alt="addSkill" />
-    <p class="pill" v-for="skill in skills" :key="skill">{{ skill }}</p>
+    <div>
+      <p class="pill" v-for="skill in skills" :key="skill">{{ skill }}</p>
+    </div>
 
     <input type="checkbox" v-model="terms" />
     <label>Accept terms and conditions</label>
@@ -63,7 +65,10 @@ export default {
   methods: {
     addSkill(e) {
       if (e.key === "," && this.tempSkill) {
-        this.skills.push(this.tempSkill);
+        if (!this.skills.includes(this.tempSkill)) {
+          this.skills.push(this.tempSkill);
+        }
+        this.tempSkill = "";
       }
     },
   },
@@ -108,5 +113,22 @@ input[type="checkbox"] {
   margin: 0 10px 0 0;
   position: relative;
   top: 2px;
+}
+
+.pill {
+  padding: 6px 12px;
+  background-color: #eee;
+  border: none;
+  display: inline-block;
+  margin: 20px 10px 0 0;
+  cursor: pointer;
+  border-radius: 20px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.pill:hover {
+  opacity: 0.8;
 }
 </style>
