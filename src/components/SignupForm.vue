@@ -14,6 +14,10 @@
       <option value="Full-stack developer">Full-stack developer</option>
     </select>
 
+    <label>Skills:</label>
+    <input type="text" v-model="tempSkill" @keyup.alt="addSkill" />
+    <p class="pill" v-for="skill in skills" :key="skill">{{ skill }}</p>
+
     <input type="checkbox" v-model="terms" />
     <label>Accept terms and conditions</label>
 
@@ -38,6 +42,7 @@
     <p>Role: {{ role }}</p>
     <p>Terms &#38; conditions accepted: {{ terms }}</p>
     <p>Names: {{ names }}</p>
+    <p>Skills: {{ skills }}</p>
   </div>
 </template>
 
@@ -51,7 +56,16 @@ export default {
       role: "",
       terms: false,
       names: [],
+      tempSkill: "",
+      skills: [],
     };
+  },
+  methods: {
+    addSkill(e) {
+      if (e.key === "," && this.tempSkill) {
+        this.skills.push(this.tempSkill);
+      }
+    },
   },
 };
 </script>
